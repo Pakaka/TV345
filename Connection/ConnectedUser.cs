@@ -19,14 +19,14 @@ namespace Project
 {
     class ConnectedUser
     {
-        TcpClient clientSocket;                                                                         // socket to accept user connections 
-        Socket pictureSocket;                                                                           // socket to transfer and recieve pictures stream
-        NetworkStream dataStream;                                                                       // the main network stream 
-        Form screen;                                                                                    // Pictures stream form (screen)
-        string remoteIP = "127.0.0.1";                                                                  // the remote IP of the server to connect 
-        int keyboardPort, mousePort, picPort;                                                            // the keyboardPort to connect to 
-        Thread listener;                                                                                // the server's listener thread 
-        string username = "000";                                                                        // the name of the computer, as default "000"
+        TcpClient clientSocket;                                                                  // socket to accept user connections 
+        Socket pictureSocket;                                                                    // socket to transfer and recieve pictures stream
+        NetworkStream dataStream;                                                               // the main network stream 
+        Form screen;                                                                             // Pictures stream form (screen)
+        string remoteIP = "127.0.0.1";                                                           // the remote IP of the server to connect 
+        int keyboardPort, mousePort, picPort;                                                   // the keyboardPort to connect to 
+        Thread listener;                                                                         // the server's listener thread 
+        string username = "000";                                                               // the name of the computer, as default "000"
         ListeningServer parent;
         static bool controlled = false, recieving = false;
 
@@ -62,9 +62,9 @@ namespace Project
         {
             int userChoice;
             // The 'handshake' with the server 
-            ConnectionHelper.tcpSend("101", this.dataStream);                                                                     // sending connection request code
-            string msg = ConnectionHelper.tcpRecv(this.dataStream);                                                               // waiting to the answer from the other client
-            while(msg!="102")                                                                                                     // if the answer is not OK code
+            ConnectionHelper.tcpSend("101", this.dataStream);                                                            // sending connection request code
+            string msg = ConnectionHelper.tcpRecv(this.dataStream);                                                     // waiting to the answer from the other client
+            while(msg!="102")                                                                                           // if the answer is not OK code
             {
                 if (msg == "404 Error")
                 {
@@ -72,16 +72,16 @@ namespace Project
                     Console.WriteLine("Error connecting, The server is busy");              
                     return -1;
                 }
-                ConnectionHelper.tcpSend("101", this.dataStream);                                                                 // sending again while we will recieve OK code 
-                msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                  // recieving an answer from the other client 
+                ConnectionHelper.tcpSend("101", this.dataStream);                      // sending again while we will recieve OK code 
+                msg = ConnectionHelper.tcpRecv(this.dataStream);                      // recieving an answer from the other client 
             }
 
             // Sending the name to the server and requesting picture socket keyboardPort 
-            ConnectionHelper.tcpSend(this.username, this.dataStream);                                                             // sending my username to the server 
-            ConnectionHelper.tcpRecv(this.dataStream);                                                                            // recieving confirmation code
-            ConnectionHelper.tcpSend("201", this.dataStream);                                                                     // sending Socket opening request code
-            msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                      // waiting for answer 
-            while(msg!="202")                                                                                                     // if the answer is not OK, sending the request again 
+            ConnectionHelper.tcpSend(this.username, this.dataStream);                         // sending my username to the server 
+            ConnectionHelper.tcpRecv(this.dataStream);                                         // recieving confirmation code
+            ConnectionHelper.tcpSend("201", this.dataStream);                                // sending Socket opening request code
+            msg = ConnectionHelper.tcpRecv(this.dataStream);                                 // waiting for answer 
+            while(msg!="202")                                                     // if the answer is not OK, sending the request again 
             {                                                                                       
                 ConnectionHelper.tcpSend("201", this.dataStream);
                 msg = ConnectionHelper.tcpRecv(this.dataStream);
@@ -89,30 +89,30 @@ namespace Project
             
 
             // creating UDP socket for Video sending
-            msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                       // getting the picture Port from the client
-            this.picPort = int.Parse(msg); 
-            this.remoteIP = ((IPEndPoint)(this.clientSocket.Client.RemoteEndPoint)).Address.ToString();                            // getting the ip of the server
-            IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(this.remoteIP), this.picPort);                                        // creating IPEndPoint for socket creation
-            this.pictureSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);                      // creating socket to the server
+            msg = ConnectionHelper.tcpRecv(this.dataStream);                       // getting the picture Port from the client
+            this.picPort = int.Parse(msg);
+            this.remoteIP = ((IPEndPoint)(this.clientSocket.Client.RemoteEndPoint)).Address.ToString();   // getting the ip of the server
+            IPEndPoint ipep = new IPEndPoint(IPAddress.Parse(this.remoteIP), this.picPort);       // creating IPEndPoint for socket creation
+            this.pictureSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);      // creating socket to the server
 
             // End of UDP socket creation 
             Logger.write("Opened a socket to the server on keyboardPort: " + this.picPort);
             try
             {
-                this.pictureSocket.Connect(ipep);                                                                                  // trying to connect to the server 
+                this.pictureSocket.Connect(ipep);                               // trying to connect to the server 
             }
             catch (SocketException e)
-            {
-                Console.WriteLine("Unable to connect to server.");                                                                 // error was occured, connection faild
-                Console.WriteLine(e.ToString());                                                                                   // printing the error 
+            
+                Console.WriteLine("Unable to connect to server.");                 // error was occured, connection faild
+                Console.WriteLine(e.ToString());                                  // printing the error 
                 Console.ReadLine();
             }
 
             ChooseInterface choose = new ChooseInterface(this.dataStream, this.remoteIP, this.clientSocket, this.pictureSocket);
             choose.ShowDialog();
 
-            this.pictureSocket.Close();                                                                                             // closing picture socket 
-            this.clientSocket.Close();                                                                                              // closing client data socket 
+            this.pictureSocket.Close();                                                            // closing picture socket 
+            this.clientSocket.Close();                                                           // closing client data socket 
             ConnectionInterface form = new ConnectionInterface();                                                                                                         // starting the main again 
             return 0;                                                                                                           
         }
@@ -129,27 +129,27 @@ namespace Project
         {
             Socket pictureServerSocket, client;
             // handshake with the client 
-            string msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                  // getting a msg from the potential client 
-            while (msg != "101")                                                                                                     // waiting the 101 message - connection request 
+            string msg = ConnectionHelper.tcpRecv(this.dataStream);                 // getting a msg from the potential client 
+            while (msg != "101")                                                 // waiting the 101 message - connection request 
             {
                 // wrong message 
                 ConnectionHelper.tcpSend("103", this.dataStream);
                 msg = ConnectionHelper.tcpRecv(this.dataStream);
             }
-            ConnectionHelper.tcpSend("102", this.dataStream);                                                                        // connection established 
+            ConnectionHelper.tcpSend("102", this.dataStream);                                      // connection established 
 
             // recieving the name from the client 
-            username = ConnectionHelper.tcpRecv(this.dataStream);                                                                    // getting the username of the client 
+            username = ConnectionHelper.tcpRecv(this.dataStream);                                  // getting the username of the client 
             ConnectionHelper.tcpSend("200OK", this.dataStream);
 
-            msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                         // getting the next message
-            while (msg != "201")                                                                                                     // waiting to 201 message - picture socket creationg
+            msg = ConnectionHelper.tcpRecv(this.dataStream);                                     // getting the next message
+            while (msg != "201")                                                  // waiting to 201 message - picture socket creationg
             {
                 ConnectionHelper.tcpSend("203", this.dataStream);
                 msg = ConnectionHelper.tcpRecv(this.dataStream);
             }
 
-            picPort = ConnectionHelper.getPort();                                                                                    // getting next free port 
+            picPort = ConnectionHelper.getPort();                                                   // getting next free port 
 
             while (true)
             {
@@ -162,8 +162,8 @@ namespace Project
                     pictureServerSocket.Bind(ipep);
                     pictureServerSocket.Listen(10);
 
-                    ConnectionHelper.tcpSend("202", this.dataStream);                                                               // sending confirmation that the socket has opened successfully 
-                    ConnectionHelper.tcpSend(picPort.ToString(), this.dataStream);                                                  // sending the port number 
+                    ConnectionHelper.tcpSend("202", this.dataStream);           // sending confirmation that the socket has opened successfully 
+                    ConnectionHelper.tcpSend(picPort.ToString(), this.dataStream);       // sending the port number 
                     client = pictureServerSocket.Accept();
                     this.pictureSocket = client;
                     break;
@@ -176,13 +176,13 @@ namespace Project
             }
 
 
-            this.remoteIP = ((IPEndPoint)(this.clientSocket.Client.RemoteEndPoint)).Address.ToString();                             // getting the ip of the server  
+            this.remoteIP = ((IPEndPoint)(this.clientSocket.Client.RemoteEndPoint)).Address.ToString();   // getting the ip of the server  
             Logger.write("Opened a socket to User ip: " + this.remoteIP + " on keyboardPort: " + keyboardPort);
-            msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                        // getting the next message code 
+            msg = ConnectionHelper.tcpRecv(this.dataStream);                                // getting the next message code 
             while (msg != "301" && msg != "401" && msg != "501")
             {
                 ConnectionHelper.tcpSend("303", this.dataStream);
-                msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                    // getting the next message code 
+                msg = ConnectionHelper.tcpRecv(this.dataStream);                          // getting the next message code 
             }
 
             if (msg == "301")
@@ -200,13 +200,13 @@ namespace Project
                     // activate the sender 
                     ConnectionHelper.tcpSend("302", this.dataStream);   
                     ConnectionHelper.tcpRecv(this.dataStream);
-                    keyboardPort = ConnectionHelper.getPort();                                                                      // getting the next free port for keyboard data 
-                    ConnectionHelper.tcpSend(keyboardPort.ToString(), this.dataStream);                                             // sending the keyboard port 
-                    ConnectionHelper.tcpRecv(this.dataStream);                                                                      // recieving port request 
-                    mousePort = ConnectionHelper.getPort();                                                                         // getting the next free port for mouse data 
-                    ConnectionHelper.tcpSend(mousePort.ToString(), this.dataStream);                                                // sending the mouse port 
-                    Controller listener = new Controller(this.clientSocket, this.keyboardPort, this.mousePort, this.remoteIP);      // creating the listener form 
-                    listener.runListenter();                                                                                        // starting the listener 
+                    keyboardPort = ConnectionHelper.getPort();                      // getting the next free port for keyboard data 
+                    ConnectionHelper.tcpSend(keyboardPort.ToString(), this.dataStream);       // sending the keyboard port 
+                    ConnectionHelper.tcpRecv(this.dataStream);                               // recieving port request 
+                    mousePort = ConnectionHelper.getPort();                                // getting the next free port for mouse data 
+                    ConnectionHelper.tcpSend(mousePort.ToString(), this.dataStream);       // sending the mouse port 
+                    Controller listener = new Controller(this.clientSocket, this.keyboardPort, this.mousePort, this.remoteIP);  // creating the listener form 
+                    listener.runListenter();                                                       // starting the listener 
                     Logger.write("Activating sender to User with ip: " + this.remoteIP);                                
                     while (true)
                     {
@@ -218,8 +218,8 @@ namespace Project
                         }
 
                     }
-                    listener.terminate();                                                                                           // stoping the listener 
-                    controlled = false;                                                                                             // setting the mode to not controlled 
+                    listener.terminate();                                                          // stoping the listener 
+                    controlled = false;                                                          // setting the mode to not controlled 
                 }        
             }
             if (msg == "401")
@@ -231,15 +231,15 @@ namespace Project
                 }
                 else
                 {
-                    recieving = true;                                                                                               // setting to transmitting mode 
+                    recieving = true;                                                         // setting to transmitting mode 
                     // activate the listener    
                     ConnectionHelper.tcpSend("402", this.dataStream);
                     Logger.write("Activating listener to User with ip: " + this.remoteIP);
-                    screen = new PicStream(this.pictureSocket, null);                                                               // creating picture form 
-                    screen.ShowDialog();                                                                                            // showing the picture from 
-                    this.pictureSocket.Close();                                                                                     // closing the picture socket 
-                    parent.startServer();                                                                                           // starting the server again 
-                    recieving = false;                                                                                              // setting mode to regular 
+                    screen = new PicStream(this.pictureSocket, null);                               // creating picture form 
+                    screen.ShowDialog();                                                           // showing the picture from 
+                    this.pictureSocket.Close();                                               // closing the picture socket 
+                    parent.startServer();                                                      // starting the server again 
+                    recieving = false;                                                      // setting mode to regular 
                 }
             
             }
@@ -277,8 +277,8 @@ namespace Project
         {
             try
             {
-                this.listener = new Thread(this.ConnectionListener);                                            // creating listener thread 
-                listener.Start();                                                                               // starting the thread 
+                this.listener = new Thread(this.ConnectionListener);                              // creating listener thread 
+                listener.Start();                                                        // starting the thread 
                 return true;
             }
             catch
@@ -299,7 +299,7 @@ namespace Project
         {
             try
             {
-                this.pictureSocket.Close();                                                                     // closing the sockets
+                this.pictureSocket.Close();                                                       // closing the sockets
                 this.clientSocket.Close(); 
                 return true;
             }
