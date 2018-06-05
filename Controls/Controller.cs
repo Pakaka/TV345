@@ -36,13 +36,7 @@ namespace Project.Controls
 
         private void Keyboard_Load(object sender, EventArgs e)
         {
-            /* 
-               mouseHook.MouseMove += new MouseEventHandler(mouseHook_MouseMove);
-               mouseHook.MouseDown += new MouseEventHandler(mouseHook_MouseDown);
-               mouseHook.MouseUp += new MouseEventHandler(mouseHook_MouseUp);
-               mouseHook.MouseWheel += new MouseEventHandler(mouseHook_MouseWheel);
-               mouseHook.Start();
-            */
+           
             SetXYLabel(MouseSimulator.X, MouseSimulator.Y);
         }
 
@@ -146,7 +140,7 @@ namespace Project.Controls
             do
             {
                 index = -1;
-                // UasdPasdUasd 
+               
                 index1 = key.IndexOf((char)2);
                 index2 = key.IndexOf((char)3);
                 if (index1 == -1 && index2 != -1)
