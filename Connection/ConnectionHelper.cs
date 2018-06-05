@@ -84,18 +84,18 @@ namespace Project.Connection
                 int dataleft = size;                                                                    // how many data left to send 
                 int sent;                                                                               // how many data sent this time
 
-                byte[] datasize = new byte[4];                                                          // represents the lenght of the data
-                datasize = BitConverter.GetBytes(size);                                                 // getting the lenght of the data
-                sent = s.Send(datasize);                                                                // sending the data     
+                byte[] datasize = new byte[4];                                                    // represents the lenght of the data
+                datasize = BitConverter.GetBytes(size);                                           // getting the lenght of the data
+                sent = s.Send(datasize);                                                          // sending the data     
 
                 // while there is unsent data
                 while (total < size)        
                 {
-                    sent = s.Send(data, total, dataleft, SocketFlags.None);                             // sending the data (max that we can)
-                    total += sent;                                                                      // updating the total sent data size 
-                    dataleft -= sent;                                                                   // updating how much data left to sent 
+                    sent = s.Send(data, total, dataleft, SocketFlags.None);                        // sending the data (max that we can)
+                    total += sent;                                                                 // updating the total sent data size 
+                    dataleft -= sent;                                                              // updating how much data left to sent 
                 }
-                return total;                                                                           // returning the lenght of sent data 
+                return total;                                                                      // returning the lenght of sent data 
             }
             catch
             {
