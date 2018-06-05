@@ -62,9 +62,9 @@ namespace Project
         {
             int userChoice;
             // The 'handshake' with the server 
-            ConnectionHelper.tcpSend("101", this.dataStream);                                                            // sending connection request code
-            string msg = ConnectionHelper.tcpRecv(this.dataStream);                                                     // waiting to the answer from the other client
-            while(msg!="102")                                                                                           // if the answer is not OK code
+            ConnectionHelper.tcpSend("101", this.dataStream);                                 // sending connection request code
+            string msg = ConnectionHelper.tcpRecv(this.dataStream);                      // waiting to the answer from the other client
+            while(msg!="102")                                                              // if the answer is not OK code
             {
                 if (msg == "404 Error")
                 {
