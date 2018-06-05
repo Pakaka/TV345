@@ -39,11 +39,11 @@ namespace Project.Interface
         {
             this.Hide();
             string msg;
-            ConnectionHelper.tcpSend("501", this.dataStream);                                                               // sending request for connection                                                                              // opening keyboard controller 
-            msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                // waiting for answer 
+            ConnectionHelper.tcpSend("501", this.dataStream);                               // sending request for connection                                                                              // opening keyboard controller 
+            msg = ConnectionHelper.tcpRecv(this.dataStream);                               // waiting for answer 
             if (msg == "404 Error")
             {
-                Console.WriteLine("Error connecting, The server is busy");                                                    // the server is busy.  
+                Console.WriteLine("Error connecting, The server is busy");                // the server is busy.  
                 this.Close();
             }
             while (msg != "502")
@@ -53,8 +53,8 @@ namespace Project.Interface
             }
             Console.WriteLine("Started the BroadCast Listener");
             Logger.write("User with ip: " + this.remoteIP + " has opened broadcast listener");
-            this.screen = new PicStream(this.pictureSocket, null);                                                             // opening pictures screen 
-            this.screen.ShowDialog();                                                                                            // showing the screen 
+            this.screen = new PicStream(this.pictureSocket, null);                                   // opening pictures screen 
+            this.screen.ShowDialog();                                                                // showing the screen 
             this.Close();
         }
 
@@ -62,30 +62,30 @@ namespace Project.Interface
         {
             this.Hide();
             string msg;
-            ConnectionHelper.tcpSend("301", this.dataStream);                                                             // sending request for connection                                                                              // opening keyboard controller 
-            msg = ConnectionHelper.tcpRecv(this.dataStream);                                                              // waiting to an answer (correct answer is 302)
-            if (msg == "404 Error")                                                                                         // can't connect the server is busy 
+            ConnectionHelper.tcpSend("301", this.dataStream);                             // sending request for connection                                                                              // opening keyboard controller 
+            msg = ConnectionHelper.tcpRecv(this.dataStream);                         // waiting to an answer (correct answer is 302)
+            if (msg == "404 Error")                                                   // can't connect the server is busy 
             {
                 Console.WriteLine("Error connecting, the server is down or busy");
                 this.Close();
             }
 
-            ConnectionHelper.tcpSend("304", this.dataStream);                                                                     // requesting a new port 
-            this.keyboardPort = int.Parse(ConnectionHelper.tcpRecv(this.dataStream));                                           // recieving and saving as keyboard port
-            ConnectionHelper.tcpSend("304", this.dataStream);                                                                     // requestion a new port 
-            this.mousePort = int.Parse(ConnectionHelper.tcpRecv(this.dataStream));                                              // recieving and saving as mouse port 
+            ConnectionHelper.tcpSend("304", this.dataStream);                                  // requesting a new port 
+            this.keyboardPort = int.Parse(ConnectionHelper.tcpRecv(this.dataStream));       // recieving and saving as keyboard port
+            ConnectionHelper.tcpSend("304", this.dataStream);                                      // requestion a new port 
+            this.mousePort = int.Parse(ConnectionHelper.tcpRecv(this.dataStream));            // recieving and saving as mouse port 
             Controller controller = new Controller(this.clientSocket, this.keyboardPort, this.mousePort, this.remoteIP);    // creating the keyboard and mouse controller
-            controller.runController();                                                                                             // starting the mouse and keyboard controller        
-            while (msg != "302")                                                                                                    // error message
+            controller.runController();                                        // starting the mouse and keyboard controller        
+            while (msg != "302")                                                // error message
             {
                 ConnectionHelper.tcpSend("301", this.dataStream);
                 msg = ConnectionHelper.tcpRecv(this.dataStream);
             }
             Console.WriteLine("Started the Controller");
             Logger.write("User with ip: " + this.remoteIP + " has opened broadcast listener");
-            this.screen = new PicStream(this.pictureSocket, controller);                                                // Creating picture Form 
-            this.screen.ShowDialog();                                                                                     // opening the picture screen form 
-            controller.terminate();                                                                                         // stoping the keyboard and the mouse controllers
+            this.screen = new PicStream(this.pictureSocket, controller);                          // Creating picture Form 
+            this.screen.ShowDialog();                                                              // opening the picture screen form 
+            controller.terminate();                                                              // stoping the keyboard and the mouse controllers
             this.Close();
         }
 
@@ -93,11 +93,11 @@ namespace Project.Interface
         {
             this.Hide();
             string msg;
-            ConnectionHelper.tcpSend("401", this.dataStream);                                                               // sending transmitting request 
-            msg = ConnectionHelper.tcpRecv(this.dataStream);                                                                // waiting for answer 
+            ConnectionHelper.tcpSend("401", this.dataStream);                             // sending transmitting request 
+            msg = ConnectionHelper.tcpRecv(this.dataStream);                            // waiting for answer 
             if (msg == "404 Error")
             {
-                Console.WriteLine("Error connecting, The server is busy");                                                  // the server in busy or used.
+                Console.WriteLine("Error connecting, The server is busy");               // the server in busy or used.
                 this.Close();
             }
             while (msg != "402")
@@ -110,9 +110,9 @@ namespace Project.Interface
             Logger.write("User with ip: " + this.remoteIP + " has opened transmition sender");
             while (true)
             {
-                byte[] data = PicturesHelper.getScreenShot();                                                               // getting screenShot 
+                byte[] data = PicturesHelper.getScreenShot();                                         // getting screenShot 
                 // sending to the server 
-                if (ConnectionHelper.picSend(data, this.pictureSocket) == -1)                                               // sending the picture 
+                if (ConnectionHelper.picSend(data, this.pictureSocket) == -1)                        // sending the picture 
                 {
                     break;
                 }
