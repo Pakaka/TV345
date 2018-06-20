@@ -116,25 +116,7 @@ namespace Project.Stream
         }
 
 
-        private void PicStream_Load(object sender, EventArgs e)
-        {
-            this.timer1.Start();
-        }
-
-        private void streamPic_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void PicStream_FormClosed(object sender, FormClosedEventArgs e)
-        {
-         
-        }
-
-        private void PicStream_FormClosing(object sender, FormClosingEventArgs e)
-        {
-         
-        }
+        
     }
     }
 
