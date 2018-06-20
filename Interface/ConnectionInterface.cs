@@ -18,17 +18,7 @@ namespace Project.Interface
             InitializeComponent();
         }
 
-        /*string remoteIP;
-            ListeningServer server = new ListeningServer();
-            server.startServer();
-            Console.WriteLine("Type any key to connect to the other client");
-            Console.ReadKey();
-            server.terminateServer();
-            Console.WriteLine("Enter the IP of remote computer:");
-            remoteIP = Console.ReadLine();
-            TcpClient client = new TcpClient(remoteIP, 8888);
-            ConnectedUser user = new ConnectedUser(client, null);
-            user.openConnection();*/
+      
 
         ListeningServer server;
         private void ConnectionInterface_Load(object sender, EventArgs e)
